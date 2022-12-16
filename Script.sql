@@ -177,9 +177,11 @@ select reportsTo, count(reportsTo) as times from employees where reportsTo is no
 group by reportsTo 
 order by times desc limit 2;
 
-# 37
-
-
+# 37 chua biet lam
+select p.productCode, o2.requiredDate from products p 
+inner join orderdetails o on p.productCode = o.productCode 
+inner join orders o2 on o.orderNumber = o2.orderNumber 
+having year(o2.requiredDate) <> 2005;
 # 38
 select * from orders where status = 'Shipped' and datediff(shippedDate , orderDate) <= 3; 
 
