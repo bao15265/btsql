@@ -1,3 +1,4 @@
+use classicmodels;
 # 2
 select * from offices where country = 'USA';
 
@@ -177,11 +178,17 @@ select reportsTo, count(reportsTo) as times from employees where reportsTo is no
 group by reportsTo 
 order by times desc limit 2;
 
-# 37 chua biet lam
+# 37
 select p.productCode, o2.requiredDate from products p 
-inner join orderdetails o on p.productCode = o.productCode 
-inner join orders o2 on o.orderNumber = o2.orderNumber 
-having year(o2.requiredDate) <> 2005;
+left join orderdetails o on p.productCode = o.productCode
+left join orders o2 on o.orderNumber = o2.orderNumber 
+having p.productCode not in (select distinct productCode  from
+(
+select q.productCode, d2.requiredDate from products q 
+inner join orderdetails d on q.productCode = d.productCode
+inner join orders d2 on d.orderNumber = d2.orderNumber
+having year(d2.requiredDate) = 2005) as notIN2005
+);
 # 38
 select * from orders where status = 'Shipped' and datediff(shippedDate , orderDate) <= 3; 
 
